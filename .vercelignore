@@ -1,0 +1,11 @@
+backend/venv/
+venv/
+__pycache__/
+*.pyc
+.git
+.dockerignore
+Dockerfile
+docker-compose.yml
+.env
+.env*.local
+*.log
