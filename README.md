@@ -1,9 +1,9 @@
 # AURA | Luxury Real Estate AI Concierge (DarGlobal & Wasalt)
 
-[![Live Working URL](https://img.shields.io/badge/Live_URL-Active_Deployment-D4AF37?style=for-the-badge&logo=cloudflare)](https://frequent-routers-same-sure.trycloudflare.com)
+[![Vercel Live URL](https://img.shields.io/badge/Vercel_Live-Active_Deployment-black?style=for-the-badge&logo=vercel)](https://realestate-chatbot-delta.vercel.app)
+[![Cloudflare Live URL](https://img.shields.io/badge/Cloudflare_Live-Active_Deployment-D4AF37?style=for-the-badge&logo=cloudflare)](https://frequent-routers-same-sure.trycloudflare.com)
 [![Docker](https://img.shields.io/badge/Containerized-Docker_Compose-2496ED?style=for-the-badge&logo=docker)](file:///home/dev/.gemini/antigravity-ide/scratch/realestate-ai-chatbot/docker-compose.yml)
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js_14_TypeScript-000000?style=for-the-badge&logo=next.js)](file:///home/dev/.gemini/antigravity-ide/scratch/realestate-ai-chatbot/frontend)
-[![Vercel Deployment](https://img.shields.io/badge/Vercel-Production_Ready-black?style=for-the-badge&logo=vercel)](https://vercel.com)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI_Python_3.12-009688?style=for-the-badge&logo=fastapi)](file:///home/dev/.gemini/antigravity-ide/scratch/realestate-ai-chatbot/backend)
 [![OpenRouter](https://img.shields.io/badge/AI_Engine-OpenRouter_Free_Models-7C3AED?style=for-the-badge)](https://openrouter.ai)
 
@@ -11,11 +11,12 @@
 
 ---
 
-## 🌐 Live Access & Working URL
+## 🌐 Live Access & Working URLs
 
 You can test and evaluate the live application immediately without running any local code:
 
-👉 **[https://frequent-routers-same-sure.trycloudflare.com](https://frequent-routers-same-sure.trycloudflare.com)**
+- 🚀 **Vercel Production Deployment**: **[https://realestate-chatbot-delta.vercel.app](https://realestate-chatbot-delta.vercel.app)**
+- ⚡ **Cloudflare Edge Tunnel**: **[https://frequent-routers-same-sure.trycloudflare.com](https://frequent-routers-same-sure.trycloudflare.com)**
 
 *(Deployed with SSL, global CDN edge caching, and real-time streaming enabled).*
 
@@ -96,8 +97,8 @@ If OpenRouter free tier encounters rate limiting (HTTP 429) or if no API key is 
 
 ### 1. Clone & Configure
 ```bash
-git clone https://github.com/your-org/realestate-ai-chatbot.git
-cd realestate-ai-chatbot
+git clone https://github.com/parth-32/realestate-chatbot.git
+cd realestate-chatbot
 cp .env.example .env
 ```
 
@@ -115,28 +116,38 @@ docker compose up --build -d
 
 ---
 
-## ▲ Deploying to Vercel (Zero-Config & 1-Click Ready)
+## ▲ Deploying to Vercel (Official Vercel Services)
 
-AURA is optimized for immediate deployment to **Vercel** with full edge and serverless compatibility.
+AURA is architected with **Vercel Services** (`vercel.json`), allowing the **Next.js frontend** and **FastAPI Python backend** to build and run as independent services within a single Vercel deployment under a unified domain.
 
-### Option A: 1-Click Import from GitHub
-1. Push this repository to your GitHub account (`git push origin main`).
-2. Go to [vercel.com/new](https://vercel.com/new) and import the repository.
-3. **Framework Preset**: Vercel will auto-detect **Next.js** automatically.
-4. **Root Directory**: Leave as `./` (Root) or set to `frontend` (both are supported).
-5. **Environment Variables** (in Vercel Dashboard):
+### Architecture in `vercel.json`
+- **Frontend Service**: Rooted at `frontend/`, builds the Next.js 14 App Router UI and serves all `/(.*)` web traffic.
+- **Backend Service**: Rooted at `backend/`, runs the FastAPI ASGI application (`main:app`) and serves all `/api/(.*)` requests.
+
+```json
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "frontend": { "root": "frontend/" },
+    "backend": { "root": "backend/", "entrypoint": "main:app" }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": { "service": "backend" } },
+    { "source": "/(.*)", "destination": { "service": "frontend" } }
+  ]
+}
+```
+
+### 1-Click Import from GitHub
+1. Connect your repository (`parth-32/realestate-chatbot`) on [vercel.com/new](https://vercel.com/new).
+2. **Framework Preset**: Set to **`Services`** *(or Next.js/auto-detected)*.
+3. **Root Directory**: Leave as **`./`** (Root).
+4. **Environment Variables** (in Vercel Dashboard):
    | Variable | Value | Description |
    | :--- | :--- | :--- |
    | `OPENROUTER_API_KEY` | `sk-or-v1-...` | *(Optional)* OpenRouter key. If omitted, users can enter their key via the in-app UI Settings drawer or use the built-in deterministic fallback. |
    | `DEFAULT_MODEL` | `minimax/minimax-m3:free` | Model ID for AI Concierge stream generation. |
-   | `BACKEND_URL` | *(Optional)* | Only set if you host a dedicated external FastAPI server (e.g. Railway, Render). Otherwise, leave blank to use the native Next.js serverless functions. |
-6. Click **Deploy**.
-
-### Option B: Deploy via Vercel CLI
-```bash
-npm install -g vercel
-vercel
-```
+5. Click **Deploy**. Both the Next.js frontend and FastAPI backend will be live on your `.vercel.app` domain!
 
 ---
 
